@@ -1,0 +1,41 @@
+{
+    "is_auto_update": {
+        "label": "是否自动更新浏览器驱动",
+        "enabled": false
+    },
+    "is_headless": {
+        "label": "是否后台运行浏览器界面(不看刷课界面)",
+        "enabled": false
+    },
+    "is_auto_next": {
+        "label": "是否自动播放下一条视频(注：刷习惯分的可以关闭此选项，将随机播放视频)",
+        "enabled": true
+    },
+    "is_play_more": {
+        "label": "是否多开账号(注：账号多开有检测ip的风险)",
+        "enabled": true
+    },
+    "is_turn_out": {
+        "label": "链接是否外部跳转",
+        "enabled": true
+    },
+    "element_timeout": {
+        "label": "抓取元素最低等待时间(网络不好时可以适当延长)",
+        "time": 10,
+        "min": 5,
+        "max": 10,
+        "step": 1
+    },
+    "log_timeout": {
+        "label": "日志控制台刷新时间(查看最新日志说明)",
+        "time": 0.5,
+        "min": 0.5,
+        "max": 2,
+        "step": 0.25
+    },
+    "check_update": {
+        "label": "最新软件及版本说明可点击左侧头像查看github仓库地址",
+        "version": "2.1.1",
+        "button": "点击检查最新版本"
+    }
+}

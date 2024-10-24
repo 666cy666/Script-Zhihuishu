@@ -1,0 +1,62 @@
+.about-container {
+    height: 400px;
+    width: 700px;
+}
+
+.about-aside {
+    height: 400px;
+    width: 50px;
+    overflow: hidden;
+}
+
+.about-aside-title {
+    height: 80%;
+    padding: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-right: 10px;
+    writing-mode: vertical-rl;
+    text-align: center;
+    line-height: 1.5;
+    letter-spacing: 10px;
+    overflow: auto;
+}
+
+.about-aside-icon {
+    width: 40px;
+    text-align: center;
+    padding: 10px;
+}
+
+.about-header {
+    height: 100%;
+}
+
+.qa-item {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #fff;
+    /* transition: background 0.3s; */
+}
+
+.qa-item:hover {
+    background: #f9f9f9;
+}
+
+.qa-header {
+    display: flex;
+    align-items: center;
+}
+
+.qa-answer {
+    padding: 10px 0;
+    color: #555;
+}
+
+.about-description {
+    width: 60%;
+    text-align: center;
+}

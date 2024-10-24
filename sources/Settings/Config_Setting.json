@@ -11,10 +11,6 @@
         "label": "是否自动播放下一条视频(注：刷习惯分的可以关闭此选项，将随机播放视频)",
         "enabled": true
     },
-    "is_play_more": {
-        "label": "是否多开账号(注：账号多开有检测ip的风险)",
-        "enabled": true
-    },
     "is_turn_out": {
         "label": "链接是否外部跳转",
         "enabled": true

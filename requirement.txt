@@ -1,0 +1,11 @@
+opencv-python === 4.8.1.78
+selenium === 4.14.0
+webdriver-manager === 3.8.5
+lxml === 4.9.3
+pillow === 9.5.0
+pywebview === 5.2
+CnOcr === 2.3.0.3
+onnxruntime === 1.19.2
+jieba === 0.42.1
+scikit-learn === 1.5.2
+ddddor === 1.5.5

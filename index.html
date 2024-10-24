@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./sources/js/vue3.js"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="./sources/css/element-pkus.css" />
+    <!-- import JavaScript -->
+    <script src="./sources/js/element-plus.js"></script>
+    <link rel="stylesheet" href="./sources/css/about.css" type="text/css">
+    <title>Element Plus Demo</title>
+    <style>
+        .app {
+            background-color: #a0cfff;
+        }
+
+        #nav {
+            width: 15vh;
+        }
+
+        .watch_head {
+            width: 100%;
+
+            /* background-color: #a0cfff; */
+            .el-card__header {
+                padding: 5px;
+            }
+        }
+
+        .config-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .config-title {
+            font-size: 4vh;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .config-content {
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .config-item {
+            height: 4vh;
+            font-size: 2.5vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .config-item span {
+            flex: 1;
+        }
+
+        #aside-nav {
+            .el-tabs__item.is-left {
+                min-width: 15vh;
+                justify-content: center;
+                font-size: 3vh;
+                height: auto;
+                padding: 2vh;
+            }
+        }
+
+        #about-nav {
+            .el-tabs__item.is-top {
+                min-width: 15vh;
+                font-size: 3vh;
+                padding: 4vh;
+            }
+
+            .el-card__body {
+                padding: 0;
+            }
+        }
+
+        .watch_button {
+            width: auto;
+            height: 6.1vh;
+            font-size: 2.5vh;
+            justify-content: center;
+            margin-left: 10vh;
+            text-align: center;
+            z-index: 1000;
+            position: relative
+        }
+
+        #watch_select {
+            justify-content: center;
+
+            .el-select__selection {
+                width: 80px;
+                height: 5vh;
+                font-size: 2vh;
+                text-align: center;
+                margin: 0;
+            }
+        }
+
+        .author-info-contianer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .author-info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            width: 100%;
+            border-radius: 0.25rem;
+            padding-block: 0.5rem;
+
+            &:hover {
+                background-color: hsl(210 100% 63% / 0.2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" style="height: auto;">
+        <el-container>
+            <el-aside id="nav">
+                <el-tabs v-model="activeName" type="card" @tab-click="setActive" tab-position="left" id="aside-nav">
+                    <el-tab-pane label="刷课" name="watch" @click="setActive('watch')"></el-tab-pane>
+                    <el-tab-pane label="答案" name="answer" @click="setActive('answer')"></el-tab-pane>
+                    <el-tab-pane label="关于" name="about" @click="setActive('about')"></el-tab-pane>
+                    <el-tab-pane label="设置" name="setting" @click="setActive('setting')"></el-tab-pane>
+                    </el-tab-pane>
+                </el-tabs>
+                <div class="author-info-contianer">
+                    <el-text size="medium" style="text-align: center; margin-top: 1rem">Powered By</el-text>
+                    <el-text size="medium" style="text-align: center; margin-top: 1rem">&</el-text>
+                    <el-text size="medium" style="text-align: center; margin: 1rem 0">Repository</el-text>
+                    <el-link type="info" class="author-info-item" href="https://github.com/666cy666/Script-Zhihuishu"
+                        @click.prevent=performOpenPage("github仓库地址","https://github.com/666cy666/Script-Zhihuishu")>
+                        <div>
+                            <el-avatar src="./Doc/avatar/666cy666.png" size="large" />
+                        </div>
+                    </el-link>
+                    <el-link type="info" class="author-info-item" href="https://github.com/666cy666/Script-Zhihuishu"
+                        @click.prevent=performOpenPage("github仓库地址","https://github.com/666cy666/Script-Zhihuishu")>
+                        <div>
+                            <el-avatar src="./Doc/avatar/Nixieboluo.png" size="large" />
+                        </div>
+                    </el-link>
+                    <el-link type="info" class="author-info-item" href="https://github.com/666cy666/Script-Zhihuishu"
+                        @click.prevent=performOpenPage("github仓库地址","https://github.com/666cy666/Script-Zhihuishu")>
+                        <div>
+                            <el-avatar src="./Doc/avatar/Iuzc.png" size="large" />
+                        </div>
+                    </el-link>
+                </div>
+            </el-aside>
+            <el-main style="padding: 0;">
+                <div v-if="currentView === 'watch'">
+                    <el-card class="watch_head">
+                        <template #header style="padding: 5px;">
+                            <el-row style="margin-bottom: 10px;">
+                                <el-col :span="6" id="watch_select">
+                                    <el-select v-model="selectedAccount" placeholder="请选择账号"
+                                        @change="handleSelectChange('user', $event)" allow-create>
+                                        <el-option v-for="user in userInfoList" :key="user.account"
+                                            :label="user.account" :value="user.account" />
+                                    </el-select>
+                                </el-col>
+                                <el-col :span="1"></el-col>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-input v-model="selectedPassword" type="password" placeholder="密码" show-password
+                                        class="watch_button" style="margin-left: 0;" />
+                                </el-col>
+                                <el-col :span="2">
+                                    <el-button type="primary" @click="isAddDialogVisible = true"
+                                        class="watch_button">新增</el-button>
+                                </el-col>
+                                <el-col :span="1"></el-col>
+                                <el-col :span="2">
+                                    <el-button type="primary" @click="deleteUser" class="watch_button">删除</el-button>
+                                </el-col>
+                                <el-col :span="1"></el-col>
+                                <el-col :span="2">
+                                    <el-button type="primary" @click="isupdateDialogVisible = true"
+                                        class="watch_button">修改</el-button>
+                                </el-col>
+                            </el-row>
+                            <el-row style="margin-bottom: 10px;">
+                                <el-col :span="10" id="watch_select">
+                                    <el-select v-model="classTitle" placeholder="请选择课程"
+                                        @change="handleSelectChange('class', $event)" style="width: 90%">
+                                        <el-option v-for="item in userInfo.class_info" :key="item.course_title"
+                                            :label="item.course_title" :value="item.course_title" />
+                                    </el-select>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-button type="primary" @click="performLogin"
+                                        class="watch_button">点击自动登录</el-button>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-button type="primary" @click="fetchClassInfoList"
+                                        class="watch_button">获取课程信息</el-button>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="2"></el-col>
+                                <el-col :span="8">
+                                    <el-button type="success" @click="performWatchVideo"
+                                        class="watch_button">观看选中课程视频</el-button>
+                                </el-col>
+                                <el-col :span="2"></el-col>
+                                <el-col :span="8">
+                                    <el-button type="success" @click="performDoTest"
+                                        class="watch_button">完成选中课程测验</el-button>
+                                </el-col>
+                            </el-row>
+                        </template>
+                        <el-scrollbar height="400px" ref="scrollbar">
+                            <div v-html="messages"></div>
+                        </el-scrollbar>
+                    </el-card>
+                </div>
+                <div v-if="currentView === 'answer'">
+                    <div>
+                        <el-space direction="vertical">
+                            <el-card style="width: 100%;height: 500px;">
+                                <template #header>
+                                    <div style="text-align: center;">
+                                        <el-link style="display: block;" size="large" type="info"
+                                            @click=performOpenPage("智慧树答案网址","http://www.iamooc.com/zhihuishudaan.htm")>备用答案爬取答题方式,点击查看智慧树答案网址</el-link>
+                                        <el-input v-model="answer_url" placeholder="请将在以上链接中找到对应网课答案网址粘贴于此"
+                                            style="width:50%;text-align: center;margin: 10px;" />
+                                    </div>
+                                </template>
+                                <el-text size="large" type="success"
+                                    style="display:block;text-align: center; margin-top: 1vh"><br>当主页面自动答题失效时可点击下方链接查看课程有无对应网课答案，若有请将答案的网址填入到上方输入框中</el-text>
+                                <el-text size="large" type="warning"
+                                    style="display:block;text-align: center; margin-top: 1vh"><br>
+                                    若未找到对应网课答案，非常抱歉，请检查是否为最新版本或移步其他网址或脚本</el-text>
+                                <el-text size="large" type="primary"
+                                    style="display:block;text-align: center; margin-top: 1vh"><br>后续将更新题库及自动回答期末测试，敬请期待！</el-text>
+                            </el-card>
+                        </el-space>
+                    </div>
+                </div>
+                <div v-if="currentView === 'setting'">
+                    <div width="90%">
+                        <el-card style="max-width:90%">
+                            <template #header>
+                                <div class="config-header">
+                                    <span class="config-title">Lazy Change World v2.1.1</span>
+                                </div>
+                            </template>
+                            <div class="config-content">
+                                <div v-for="(config, key) in configs" :key="key" class="config-item">
+                                    <span>{{ config.label || key }}</span>
+                                    <template v-if="typeof config.enabled === 'boolean'">
+                                        <el-switch v-model="config.enabled" @change="performUpdateConfigInfo" />
+                                    </template>
+                                    <template v-else-if="typeof config.time === 'number'">
+                                        <el-slider v-model="config.time" :min=config.min :max=config.max
+                                            :step=config.step style="width: 70px;" @change="performUpdateConfigInfo"
+                                            show-stops />
+                                    </template>
+                                    <template v-else-if="typeof config.version === 'string'">
+                                        <el-button @click="performCheckUpdate()" type="primary"
+                                            round>{{config.button}}</el-button>
+                                    </template>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+                </div>
+            </el-main>
+            <el-dialog v-model="isAddDialogVisible" title="新增账号">
+                <el-form :model="newUser">
+                    <el-form-item label="账号">
+                        <el-input v-model="newUser.account"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input type="password" v-model="newUser.password"></el-input>
+                    </el-form-item>
+                </el-form>
+                <template #footer>
+                    <span class="dialog-footer">
+                        <el-button @click="isAddDialogVisible = false">取消</el-button>
+                        <el-button type="primary" @click="addUser">确定</el-button>
+                    </span>
+                </template>
+            </el-dialog>
+            <el-dialog v-model="isupdateDialogVisible" title="修改账号">
+                <el-form :model="this.userInfo">
+                    <el-form-item label="账号">
+                        <el-input v-model="this.userInfo.account"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input type="password" v-model="this.userInfo.password"></el-input>
+                    </el-form-item>
+                </el-form>
+                <template #footer>
+                    <span class="dialog-footer">
+                        <el-button @click="isupdateDialogVisible = false">取消</el-button>
+                        <el-button type="primary" @click="updateUserinfo()">确定</el-button>
+                    </span>
+                </template>
+            </el-dialog>
+        </el-container>
+        <!-- 新增账号对话框 -->
+
+    </div>
+
+    <script type="module">
+        import req_api from './sources/js/req_api.js';  // 引入 API
+        import file_api from './sources/js/file_api.js'
+
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currentView: 'watch', // 默认显示的视图
+                    activeName: 'watch',
+                    userInfoList: [],
+                    userIndex: 0, // 当前用户的索引
+                    classIndex: 0, // 选中的课程标题
+                    classTitle: null,
+                    classText: '', // 显示的课程文本
+                    selectedAccount: '',
+                    selectedPassword: '',
+                    answer_url: '',//待爬取的答案网址
+                    userInfo: {}, // 用户信息
+                    configs: null,
+                    isAddDialogVisible: false, // 控制对话框的显示
+                    isupdateDialogVisible: false,// 控制对话框的显示
+                    newUser: { // 新用户信息
+                        account: '',
+                        password: ''
+                    },
+                    messages: '',
+                    AboutUrl: '',
+                    loading: false,
+                    activeIndex: 0,//关于界面索引
+                    items: [], // 初始化为数组
+
+                };
+            },
+            watch: {
+                classTitle(newValue) {
+                    console.log(this.userInfo);
+                    const selectedCourse = this.userInfo.class_info.find(item => item.course_title === newValue);
+                    this.classText = selectedCourse ? selectedCourse.course_text : '';
+                },
+                'selectedAccount': {
+                    handler(newValue) {
+                        const user = this.userInfoList[this.userIndex];
+                        this.selectedPassword = user ? user.password : '';
+                    },
+                    immediate: true,  // 立即执行，确保初始加载时也能设置密码
+                    deep: true        // 深度监听，以防用户信息对象的内部改变
+                },
+            },
+            mounted() {
+                window.addEventListener('pywebviewready', this.handlePywebview, true);
+                this.fetchMemory();
+                this.fetchConfig();
+                this.fetchUserInfo();
+                this.loaditems();
+                // 开启日志
+                this.messageInterval = setInterval(this.fetchMessages, 1000);
+            },
+            beforeDestroy() {
+                window.removeEventListener('pywebviewready', this.handlePywebview, true);
+            },
+            methods: {
+                handleSelectChange(type, value) {
+                    if (type === 'user') {
+                        if (this.userIndex == -1) {
+                            this.selectedAccount = '';
+                            this.selectedPassword = '';
+                        }
+                        this.userIndex = this.userInfoList.findIndex(user => user.account === value);
+                        this.selectedAccount = value;
+                    } else if (type === 'class') {
+                        // 假设 userInfo 有一个包含课程信息的 class_info 数组
+                        this.classIndex = this.userInfo.class_info.findIndex(classItem => classItem.course_title === value);
+                        if (this.classIndex !== -1) {
+                            this.classTitle = value;
+                            // 这里可以添加对 classText 或其他相关数据的更新
+                        }
+                    }
+                    this.updateMemoryInfo()
+                    this.fetchUserInfo()
+                },
+                setActive(view) {
+                    this.currentView = view.paneName;
+                    this.activeName = view.paneName;
+                    this.updateMemoryInfo()
+                },
+                showAddUserDialog() {
+                    this.isAddDialogVisible = true;
+                },
+                async fetchMessages() {
+                    try {
+                        const response = await req_api.getLogContent();
+                        if (response) {
+                            console.log("response", response);
+                            this.messages = response;
+                            this.message = this.messages.replace(/\n/g, '<br>');
+                        }
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                getConfigEnabled(key) {
+                    if (this.configs && this.configs[key]) {
+                        return this.configs[key].enabled;
+                    }
+                    return false; // 如果配置项不存在，返回默认值 false
+                },
+
+                async setConfigEnabled(key, newState = null) {
+                    if (this.configs && this.configs[key]) {
+                        if (newState === null) { // 如果没有提供新状态，反转当前状态
+                            this.configs[key].enabled = !this.configs[key].enabled;
+                        } else {
+                            this.configs[key].enabled = newState; // 设置为提供的新状态
+                        }
+                        await file_api.updateConfigInfo(this.configs);
+                        return this.configs[key].enabled; // 返回更新后的状态
+                    }
+                    return false; // 如果配置项不存在，返回默认值 false
+                },
+                // 获取配置信息
+                async fetchConfig() {
+                    try {
+                        const response = await file_api.getConfigInfo();
+                        this.configs = response;
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async fetchMemory() {
+                    try {
+                        const response = await file_api.getMemoryInfo();
+                        this.userIndex = response.userIndex;
+                        this.classIndex = response.classIndex;
+                        this.currentView = this.activeName = response.router;
+
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async fetchUserInfo() {
+                    try {
+                        const userInfoList = await file_api.getUserInfoList(); // 假设返回一个用户列表
+                        this.userInfoList = userInfoList;
+                        console.log("fetchUserInfo", this.userInfoList);
+                        this.userInfo = {};  // 确保 userInfo 初始为空对象
+                        if (this.userInfoList.length > 0 && this.userIndex < this.userInfoList.length) {
+                            this.userInfo = this.userInfoList[this.userIndex];  // 直接从列表中获取用户信息
+                            this.selectedAccount = this.userInfo.account;
+                        }
+                        if (this.userInfo.class_info && this.userInfo.class_info.length > 0 &&
+                            this.classIndex < this.userInfo.class_info.length && this.classIndex >= 0) {
+                            this.classTitle = this.userInfo.class_info[this.classIndex].course_title;
+                        } else {
+                            this.classTitle = null; // 如果没有可用课程或索引无效，则没有默认选中的课程
+                        }
+                    } catch (error) {
+                        alert("用户信息读取失败: fetchUserInfoError", error.message);
+                    }
+                },
+                async fetchClassInfoList() {
+                    try {
+                        const response = await req_api.getClassInfoList(this.userInfo, this.userIndex); // 假设返回一个用户列表
+                        this.fetchUserInfo()
+                        alert("课程信息爬取成功")
+                        this.$forceUpdate(); // 这是一个强制 Vue 重新渲染的方法，通常不建议使用，但可以在某些情况下作为临时解决方案
+                    } catch (error) {
+                        alert("课程信息读取失败:", error.message);
+                    }
+                },
+                async updateUserinfo() {
+                    if (this.selectedAccount !== '') {
+                        try {
+                            console.log(this.userIndex);
+                            this.selectedAccount = this.userInfo.account
+                            this.selectedPassword = this.userInfo.password
+                            const response = await file_api.update_Userinfo_By_Index(this.userInfo, this.userIndex);
+                            this.isupdateDialogVisible = false;
+                        }
+                        // 反馈
+                        catch (error) {
+                            alert("修改失败:", error.message);
+                        }
+                    } else {
+                        alert('找不到用户！');
+                    }
+                },
+                async updateMemoryInfo() {
+                    try {
+                        const memoryinfo = {
+                            "userIndex": this.userIndex,
+                            "classIndex": this.classIndex,
+                            "router": this.currentView
+                        }
+                        const response = await file_api.updateMemoryInfo(memoryinfo)
+                    } catch (error) {
+                        alert("更新记忆数据失败:", error.message);
+                    }
+                },
+                async addUser() {
+                    if (!this.newUser.account || !this.newUser.password) {
+                        alert('账号和密码不能为空！');
+                        return;
+                    }
+                    const new_userinfo = {
+                        account: this.newUser.account,
+                        password: this.newUser.password,
+                        class_info: []
+                    }
+                    this.userInfoList.push(new_userinfo);
+                    console.log("addUser", this.userInfoList);
+
+                    try {
+                        const response = file_api.update_UserinfoList(this.userInfoList);
+                        console.log();
+
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                    this.newUser = { account: '', password: '' };
+                    // 关闭对话框
+                    this.isAddDialogVisible = false;
+                    this.userIndex = this.userInfoList.length - 1
+                    this.selectedAccount = this.userInfoList[this.userIndex]
+                    this.refreshCount()
+                    // 反馈
+                    alert('新用户添加成功！');
+                },
+                async deleteUser(account) {
+                    if (this.userIndex !== -1) {
+                        this.userInfoList.splice(this.userIndex, 1);
+                        try {
+                            const response = file_api.update_UserinfoList(this.userInfoList);
+                            if (this.userInfoList.length === 0) {
+                                console.log("无账号");
+                                this.userIndex = -1
+                            }
+                            else this.userIndex = 0
+                            this.refreshCount()
+                            alert('用户删除成功！');
+                        } catch (error) {
+                            alert(error.message);
+                        }
+                    } else {
+                        alert('找不到用户！');
+                    }
+                },
+                async performLogin() {
+                    try {
+                        const is_auto_update = "is_auto_update"
+                        const update_state = this.getConfigEnabled(is_auto_update)
+                        this.setConfigEnabled(is_auto_update, false)
+                        const response = await req_api.login(this.userInfo.account, this.userInfo.password, update_state);
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async performOpenPage(quesiton, url) {
+                    try {
+                        if (this.configs.is_turn_out.enabled) {
+                            const response = await req_api.openpage(quesiton, url);
+                        }
+                        else {
+                            await navigator.clipboard.writeText(url);
+                            // 使用自定义样式使 URL 在 alert 中更加醒目
+                            return alert(`已复制链接网址: \n\n${url}\n\n可在设置中开启链接跳转查看文档`);
+                        }
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async performDoTest() {
+                    try {
+                        const response = await req_api.do_test(this.classTitle, this.classIndex, this.answer_url);
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async performWatchVideo() {
+                    try {
+                        const response = await req_api.watchVideo(this.classIndex);
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async performUpdateConfigInfo() {
+                    try {
+                        const response = await file_api.updateConfigInfo(this.configs);
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                async performCheckUpdate() {
+                    try {
+                        const response = await req_api.CheckUpdate();
+                        alert(response)
+                    } catch (error) {
+                        alert(error.message);
+                    }
+                },
+                refreshCount() {
+                    if (this.userIndex === -1) {
+                        this.selectedAccount = ''
+                    }
+                    else this.selectedAccount = this.userInfoList[this.userIndex].account
+                },
+                selectUser(index) {
+                    this.userIndex = index;
+                    this.userInfo = this.userInfoList[index];
+                },
+                handleLoad() {
+                    this.loading = false
+                },
+                setAboutActive(index) {
+                    this.activeIndex = index; // 设置当前选中项
+                },
+                async loaditems() {
+                    const response = []
+                    this.items = response
+                },
+            },
+        });
+
+        app.use(ElementPlus);
+        app.mount("#app");
+    </script>
+
+</body>
+
+</html>

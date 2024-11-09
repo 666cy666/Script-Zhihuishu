@@ -57,7 +57,7 @@ class Api:
 
     def login(self, account, password, update=False):
         from API.Login import _login
-        _login(account, password)
+        _login(account, password, update)
 
     def get_classinfo_list(self, user_info, user_index):
         from API.Login import _get_classinfo_list

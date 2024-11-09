@@ -8,12 +8,12 @@ from Util.Selenium_Util import Selenium_Edge
 
 edge_driver = None
 
-def init_page():
+def init_page(update):
     global edge_driver
     from Util.File_Util import loading_setting
-    is_auto_update = loading_setting("is_auto_update")
+    # is_auto_update = loading_setting("is_auto_update")
     is_headless = loading_setting("is_headless")
-    edge_driver = Selenium_Edge(update=is_auto_update, headless=is_headless)
+    edge_driver = Selenium_Edge(update=update, headless=is_headless)
     edge_driver.driver.set_window_size(1300, 800)  # 设置浏览器窗口大小
     edge_driver.get_driver('https://onlineweb.zhihuishu.com/onlinestuh5')
 
@@ -51,13 +51,13 @@ def login_page(account, password):
     except Exception as e:
         print(f"未通过验证码，请重启或手动登录, 报错信息{e}")
 
-def _login(account,password):
+def _login(account,password, update):
     global edge_driver
     from Util.File_Util import loading_setting
     # is_play_more = loading_setting("is_play_more")
     # if is_play_more:
     try:
-        init_page()
+        init_page(update)
     except JSONDecodeError:
         print("抱歉，目前不允许多开账号，敬请期待下个版本")
     login_page(account, password)
